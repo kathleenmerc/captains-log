@@ -90,6 +90,28 @@ app.get('/logs/new', (req, res) => {
 })
 
 
+// DELETE ROUTE
+app.delete('/logs/:id', async (req, res) => {
+    try {
+        const deletedLog = await Log.findByIdAndDelete(req.params.id)
+        res.redirect('/logs')
+    } catch (err) {
+        res.send(err)
+    }
+})
+
+// Delete Route (.then method)
+// app.delete('/logs/:id', (req, res) => {
+//     Log.findByIdAndDelete(req.params.id)
+//         .then((log) => {
+//             res.redirect('/logs')
+//         })
+//         .catch((err) => {
+//             res.send(err)
+//         })
+// })
+
+
 // CREATE ROUTE
 app.post('/logs', async (req, res) => {
     try {
