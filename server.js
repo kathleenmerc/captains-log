@@ -17,7 +17,7 @@ mongoose.connect(process.env.MONGO_URI, {
 
 mongoose.connection.once("open", () => {
     console.log("Connected to mongoDB")
-}) 
+})
 
 // SET UP ENGINE
 app.set("view engine", "jsx")
@@ -29,7 +29,7 @@ app.use((req, res, next) => {
     next()
 })
 
-app.use(express.urlencoded({extended:false}))
+app.use(express.urlencoded({ extended: false }))
 app.use(methodOverride('_method'))
 app.use(express.static("public"))
 
@@ -61,7 +61,8 @@ app.get('/logs/seed', (req, res) => {
     })
 })
 
-// INDEX
+
+// INDEX ROUTE
 app.get('/logs', async (req, res) => {
     try {
         const logs = await Log.find({})
@@ -69,43 +70,59 @@ app.get('/logs', async (req, res) => {
     } catch (err) {
         res.send(err)
     }
-
-
-    // Log.find({}, (err, allLogs) => {
-    //     if (!err) {
-    //         res.render('Index', { logs: allLogs } )
-    //     } else {
-    //         res.send(err)
-    //     }
-    // })
 })
 
-// NEW
+// Index Route (.then method)
+// app.get('/logs', (req, res) => {
+//     Log.find({})
+//         .then((fruits) => {
+//             res.render('Index', { fruits })
+//         })
+//         .catch((err) => {
+//             res.send(err)
+//         })
+// })
+
+
+// NEW ROUTE
 app.get('/logs/new', (req, res) => {
     res.render('New')
 })
 
-// CREATE
-app.post('/logs', (req, res) => {
-    if (req.body.shipIsBroken === "on") {
-        req.body.shipIsBroken = true
-    } else {
-        req.body.shipIsBroken = false
+
+// CREATE ROUTE
+app.post('/logs', async (req, res) => {
+    try {
+        req.body.shipIsBroken = req.body.shipIsBroken === "on" ? true : false
+        const createdLog = await Log.create(req.body)
+        res.redirect('/logs')
+    } catch (err) {
+        res.send(err)
     }
-    Log.create(req.body, (err, createdLog) => {
-        if (!err) {
-            res.redirect('/logs')
-        } else {
-            res.send(err)
-        }
-    })
 })
+
+// Create route (.then method)
+// app.post('/logs', (req, res) => {
+//     if (req.body.shipIsBroken === "on") {
+//         req.body.shipIsBroken = true
+//     } else {
+//         req.body.shipIsBroken = false
+//     }
+//     Log.create(req.body, (err, createdLog) => {
+//         if (!err) {
+//             res.redirect('/logs')
+//         } else {
+//             res.send(err)
+//         }
+//     })
+// })
+
 
 // SHOW
 app.get('/logs/:id', (req, res) => {
     Log.findById(req.params.id, (err, foundLog) => {
         if (!err) {
-            res.render('Show', { log: foundLog } )
+            res.render('Show', { log: foundLog })
         } else {
             res.send(err)
         }
