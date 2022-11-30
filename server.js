@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const PORT = 3000
 const reactViews = require('express-react-views')
+const mongoose = require('mongoose')
 
 // SET UP ENGINE
 app.set("view engine", "jsx")
@@ -17,6 +18,11 @@ app.use(express.urlencoded({extended:false}))
 
 // CREATE
 app.post('/logs', (req, res) => {
+    if (req.body.shipIsBroken === "on") {
+        req.body.shipIsBroken = true
+    } else {
+        req.body.shipIsBroken = false
+    }
     res.send(req.body)
 })
 
