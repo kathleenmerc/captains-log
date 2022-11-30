@@ -62,14 +62,22 @@ app.get('/logs/seed', (req, res) => {
 })
 
 // INDEX
-app.get('/logs', (req, res) => {
-    Log.find({}, (err, allLogs) => {
-        if (!err) {
-            res.render('Index', { logs: allLogs } )
-        } else {
-            res.send(err)
-        }
-    })
+app.get('/logs', async (req, res) => {
+    try {
+        const logs = await Log.find({})
+        res.render('Index', { logs })
+    } catch (err) {
+        res.send(err)
+    }
+
+
+    // Log.find({}, (err, allLogs) => {
+    //     if (!err) {
+    //         res.render('Index', { logs: allLogs } )
+    //     } else {
+    //         res.send(err)
+    //     }
+    // })
 })
 
 // NEW
