@@ -6,6 +6,8 @@ const PORT = 3000
 const reactViews = require('express-react-views')
 const mongoose = require('mongoose')
 const Log = require('./models/logs')
+const methodOverride = require("method-override")
+
 
 // CONNECTION TO DATABASE (MongoDB)
 mongoose.connect(process.env.MONGO_URI, {
@@ -28,6 +30,7 @@ app.use((req, res, next) => {
 })
 
 app.use(express.urlencoded({extended:false}))
+app.use(methodOverride('_method'))
 
 // INDEX
 app.get('/logs', (req, res) => {
@@ -44,6 +47,8 @@ app.get('/logs', (req, res) => {
 app.get('/logs/new', (req, res) => {
     res.render('New')
 })
+
+
 
 // CREATE
 app.post('/logs', (req, res) => {
@@ -62,10 +67,12 @@ app.post('/logs', (req, res) => {
 })
 
 // SHOW
-app.get('/:id', (req, res) => {
-    Log.findById(req.params.id, (error, foundLog) => {
-        if (!error) {
-            res.render('logs/Show', { logs: foundLog } )
+app.get('/logs/:id', (req, res) => {
+    Log.findById(req.params.id, (err, foundLog) => {
+        if (!err) {
+            res.render('Show', { log: foundLog } )
+        } else {
+            res.send(err)
         }
     })
 })
