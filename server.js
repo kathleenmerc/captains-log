@@ -112,6 +112,19 @@ app.delete('/logs/:id', async (req, res) => {
 // })
 
 
+// UPDATE ROUTE
+app.put('/logs/:id', async (req, res) => {
+    const id = req.params.id;
+    try {
+        req.body.shipIsBroken = req.body.shipIsBroken === "on" ? true : false;
+        await Log.findByIdAndUpdate(id, req.body)
+        res.redirect(`/logs/${id}`)
+    } catch (err) {
+        res.send(err)
+    }
+})
+
+
 // CREATE ROUTE
 app.post('/logs', async (req, res) => {
     try {
@@ -138,6 +151,30 @@ app.post('/logs', async (req, res) => {
 //         }
 //     })
 // })
+
+
+// EDIT ROUTE
+// app.get('/logs/:id/edit', async (req, res) => {
+//     try {
+//         await Log.findById(req.params.id)
+//         res.render('Edit', { log })
+//     } catch (err) {
+//         res.send(err)
+//     }
+// })
+
+
+// Edit Route (.then method)
+app.get('/logs/:id/edit', (req, res) => {
+    Log.findById(req.params.id)
+        .then((log) => {
+            res.render('Edit', { log })
+        })
+        .catch((err) => {
+            res.send(err)
+        })
+})
+
 
 
 // SHOW ROUTE
