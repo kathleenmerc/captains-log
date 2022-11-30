@@ -118,16 +118,26 @@ app.post('/logs', async (req, res) => {
 // })
 
 
-// SHOW
-app.get('/logs/:id', (req, res) => {
-    Log.findById(req.params.id, (err, foundLog) => {
-        if (!err) {
-            res.render('Show', { log: foundLog })
-        } else {
-            res.send(err)
-        }
-    })
+// SHOW ROUTE
+app.get('/logs/:id', async (req, res) => {
+    try {
+        const log = await Log.findById(req.params.id)
+        res.render('Show', { log })
+    } catch (err) {
+        res.send(err)
+    }
 })
+
+// Show Route (.then method)
+// app.get('/logs/:id', (req, res) => {
+//     Log.findById(req.params.id, (err, foundLog) => {
+//         if (!err) {
+//             res.render('Show', { log: foundLog })
+//         } else {
+//             res.send(err)
+//         }
+//     })
+// })
 
 
 

@@ -11,7 +11,7 @@ class Show extends React.Component {
                 <body>
                     Title: {title} < br/>
                     Entry: {entry} < br/>
-                    Is the ship broken? {shipIsBroken ? "True" : "False"}
+                    Status update: {shipIsBroken ? "Ship requires maintenance" : "Ship is running smoothly, no maintenance required"}
                 </body>
             </div>
 
