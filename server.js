@@ -31,6 +31,35 @@ app.use((req, res, next) => {
 
 app.use(express.urlencoded({extended:false}))
 app.use(methodOverride('_method'))
+app.use(express.static("public"))
+
+
+// SEED ROUTE
+app.get('/logs/seed', (req, res) => {
+    const startLogs = [
+        {
+            title: "Windy Day",
+            entry: "It was a very windy day. Our sail malfunctioned and still needs to be looked at.",
+            shipIsBroken: true
+        },
+        {
+            title: "Smooth Sailing",
+            entry: "No problems and perfect weather today.",
+            shipIsBroken: false
+        },
+        {
+            title: "Rest Day",
+            entry: "Docked the ship, and went to town to relax a bit.",
+            shipIsBroken: false
+        }
+    ]
+
+    Log.deleteMany({}).then((data) => {
+        Log.create(startLogs).then((data) => {
+            res.json(data)
+        })
+    })
+})
 
 // INDEX
 app.get('/logs', (req, res) => {
@@ -47,8 +76,6 @@ app.get('/logs', (req, res) => {
 app.get('/logs/new', (req, res) => {
     res.render('New')
 })
-
-
 
 // CREATE
 app.post('/logs', (req, res) => {
