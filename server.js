@@ -114,11 +114,11 @@ app.delete('/logs/:id', async (req, res) => {
 
 // UPDATE ROUTE
 app.put('/logs/:id', async (req, res) => {
-    const id = req.params.id;
+    const id = req.params.id
     try {
         req.body.shipIsBroken = req.body.shipIsBroken === "on" ? true : false;
         await Log.findByIdAndUpdate(id, req.body)
-        res.redirect(`/logs/${id}`)
+        res.redirect(`/logs`)
     } catch (err) {
         res.send(err)
     }
